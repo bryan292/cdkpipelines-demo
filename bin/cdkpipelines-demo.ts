@@ -1,21 +1,35 @@
-#!/usr/bin/env node
-import 'source-map-support/register';
-import * as cdk from '@aws-cdk/core';
-import { CdkpipelinesDemoStack } from '../lib/cdkpipelines-demo-stack';
+import * as apigw from '@aws-cdk/aws-apigateway';
+import * as lambda from '@aws-cdk/aws-lambda';
+import { CfnOutput, Construct, Stack, StackProps } from '@aws-cdk/core';
+import * as path from 'path';
 
-const app = new cdk.App();
-new CdkpipelinesDemoStack(app, 'CdkpipelinesDemoStack', {
-  /* If you don't specify 'env', this stack will be environment-agnostic.
-   * Account/Region-dependent features and context lookups will not work,
-   * but a single synthesized template can be deployed anywhere. */
+/**
+ * A stack for our simple Lambda-powered web service
+ */
+export class CdkpipelinesDemoStack extends Stack {
+  /**
+   * The URL of the API Gateway endpoint, for use in the integ tests
+   */
+  public readonly urlOutput: CfnOutput;
+ 
+  constructor(scope: Construct, id: string, props?: StackProps) {
+    super(scope, id, props);
 
-  /* Uncomment the next line to specialize this stack for the AWS Account
-   * and Region that are implied by the current CLI configuration. */
-  // env: { account: process.env.CDK_DEFAULT_ACCOUNT, region: process.env.CDK_DEFAULT_REGION },
+    // The Lambda function that contains the functionality
+    const handler = new lambda.Function(this, 'Lambda', {
+      runtime: lambda.Runtime.NODEJS_12_X,
+      handler: 'handler.handler',
+      code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda')),
+    });
 
-  /* Uncomment the next line if you know exactly what Account and Region you
-   * want to deploy the stack to. */
-  // env: { account: '123456789012', region: 'us-east-1' },
+    // An API Gateway to make the Lambda web-accessible
+    const gw = new apigw.LambdaRestApi(this, 'Gateway', {
+      description: 'Endpoint for a simple Lambda-powered web service',
+      handler,
+    });
 
-  /* For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html */
-});
+    this.urlOutput = new CfnOutput(this, 'Url', {
+      value: gw.url,
+    });
+  }
+}
