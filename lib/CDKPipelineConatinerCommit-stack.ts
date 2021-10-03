@@ -34,7 +34,7 @@ export class CDKPipelineConatinerCommitStack extends Stack {
       });
 
       const codeCommitRole= new iam.Role(this,'codecommit-role',{
-        assumedBy: new iam.ServicePrincipal("secretsmanager.amazonaws.com"),
+        assumedBy: new iam.ServicePrincipal("codebuild.amazonaws.com"),
         roleName: 'codecommit-role',
         managedPolicies: [iam.ManagedPolicy.fromAwsManagedPolicyName('SecretsManagerReadWrite')]
   
@@ -49,6 +49,4 @@ export class CDKPipelineConatinerCommitStack extends Stack {
         role: codeCommitRole
       })
     }
-
-
   }
