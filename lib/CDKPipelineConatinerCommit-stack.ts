@@ -7,6 +7,8 @@ import * as codebuild from '@aws-cdk/aws-codebuild';
 import * as codecommit from '@aws-cdk/aws-codecommit';
 import { CdkpipelinesDemoStage } from './cdkpipelines-demo-stage';
 import { CDKPipelineConatinerCommit } from './CDKPipelineConatinerCommit-stage';
+import * as iam from '@aws-cdk/aws-iam'
+
 
 /**
  * The stack that defines the application pipeline
@@ -17,7 +19,6 @@ export class CDKPipelineConatinerCommitStack extends Stack {
 
     const sourceArtifact = new codepipeline.Artifact();
     const cloudAssemblyArtifact = new codepipeline.Artifact();
-
 
     const gitHubSource = codebuild.Source.gitHub({
         owner: 'bryan292',
@@ -31,6 +32,13 @@ export class CDKPipelineConatinerCommitStack extends Stack {
        // ], // optional, by default all pushes and Pull Requests will trigger a build
        
       });
+
+      const codeCommitRole= new iam.Role(this,'codecommit-role',{
+        assumedBy: new iam.ServicePrincipal("secretsmanager.amazonaws.com"),
+        roleName: 'codecommit-role',
+        managedPolicies: [iam.ManagedPolicy.fromAwsManagedPolicyName('SecretsManagerReadWrite')]
+  
+      }); 
   
       const code = new codebuild.Project(this,'CodeCommit',{
         environment:{
@@ -38,6 +46,7 @@ export class CDKPipelineConatinerCommitStack extends Stack {
           
         },
         source: gitHubSource,  
+        role: codeCommitRole
       })
     }
 
