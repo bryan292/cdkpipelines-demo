@@ -50,5 +50,9 @@ export class CDKPipelineConatinerCommitStack extends Stack {
         source: gitHubSource,  
         role: codeCommitRole
       })
+
+      new ShellStep('call medstack',{
+          commands: ['curl -X POST https://dashboard.medstack.co/webhooks/incoming/9R1M8LR2/NmDki2S7mFL26aW14flF']
+      })
     }
   }
