@@ -19,24 +19,27 @@ export class CDKPipelineConatinerCommitStack extends Stack {
     const cloudAssemblyArtifact = new codepipeline.Artifact();
 
 
-    const pipeline = new CdkPipeline(this, 'codeDeployContainer', {
-      // The pipeline name
-      pipelineName: 'codeDeployContainer',
-      cloudAssemblyArtifact,
-      sourceAction: new codepipeline_actions.GitHubSourceAction({
-        actionName: 'Github',
-        output: sourceArtifact,
-        oauthToken: SecretValue.secretsManager('github-token'),
+    const gitHubSource = codebuild.Source.gitHub({
         owner: 'bryan292',
         repo: 'react-calculator',
-        branch: 'master'
-      }),
-      synthAction: SimpleSynthAction.standardNpmSynth({
-        sourceArtifact,
-        cloudAssemblyArtifact,
-        buildCommand: 'npm run build'
-      }),
-    });
+        webhook: true, // optional, default: true if `webhookFilters` were provided, false otherwise
+        webhookTriggersBatchBuild: true, // optional, default is false
+       // webhookFilters: [
+       //   codebuild.FilterGroup
+        //    .inEventOf(codebuild.EventAction.PUSH)
+       //     .andBranchIs('master')
+       // ], // optional, by default all pushes and Pull Requests will trigger a build
+       
+      });
+  
+      const code = new codebuild.Project(this,'CodeCommit',{
+        environment:{
+          buildImage: codebuild.LinuxBuildImage.fromCodeBuildImageId('aws/codebuild/amazonlinux2-x86_64-standard:3.0'),
+          
+        },
+        source: gitHubSource,
+  
+      })
     }
 
 
