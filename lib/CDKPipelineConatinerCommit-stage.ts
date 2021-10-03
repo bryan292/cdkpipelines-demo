@@ -16,7 +16,7 @@ export class CDKPipelineConatinerCommit extends Stage {
   constructor(scope: Construct, id: string, props?: StageProps) {
     super(scope, id, props);
 
-    const service = new CDKPipelineConatinerCommitStack(this, 'docker_hub_stack');
+    const service = new CDKPipelineConatinerCommitStack(this, 'dockerHubStack');
     
     // Expose CdkpipelinesDemoStack's output one level higher
   }
