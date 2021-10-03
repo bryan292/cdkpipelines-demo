@@ -23,7 +23,7 @@ export class CDKPipelineConatinerCommitStack extends Stack {
         owner: 'bryan292',
         repo: 'react-calculator',
         webhook: true, // optional, default: true if `webhookFilters` were provided, false otherwise
-        webhookTriggersBatchBuild: true, // optional, default is false
+        webhookTriggersBatchBuild: false, // optional, default is false
        // webhookFilters: [
        //   codebuild.FilterGroup
         //    .inEventOf(codebuild.EventAction.PUSH)
@@ -37,8 +37,7 @@ export class CDKPipelineConatinerCommitStack extends Stack {
           buildImage: codebuild.LinuxBuildImage.fromCodeBuildImageId('aws/codebuild/amazonlinux2-x86_64-standard:3.0'),
           
         },
-        source: gitHubSource,
-  
+        source: gitHubSource,  
       })
     }
 

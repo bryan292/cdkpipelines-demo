@@ -28,3 +28,24 @@ aws configure set default.region us-east-2;
 aws configure -- to edit configuration values
 
 --------------
+    const gitHubSource = codebuild.Source.gitHub({
+      owner: 'bryan292',
+      repo: 'react-calculator',
+      webhook: true, // optional, default: true if `webhookFilters` were provided, false otherwise
+      webhookTriggersBatchBuild: true, // optional, default is false
+     // webhookFilters: [
+     //   codebuild.FilterGroup
+      //    .inEventOf(codebuild.EventAction.PUSH)
+     //     .andBranchIs('master')
+     // ], // optional, by default all pushes and Pull Requests will trigger a build
+     
+    });
+
+    const code = new codebuild.Project(this,'CodeCommit',{
+      environment:{
+        buildImage: codebuild.LinuxBuildImage.fromCodeBuildImageId('aws/codebuild/amazonlinux2-x86_64-standard:3.0'),
+        
+      },
+      source: gitHubSource,
+
+    })
