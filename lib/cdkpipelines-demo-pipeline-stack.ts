@@ -48,6 +48,14 @@ export class CdkpipelinesDemoPipelineStack extends Stack {
 
     const callMedstakDev = pipeline.addApplicationStage(devStage);
 
+    callMedstakDev.addActions( new ShellScriptAction({
+      actionName: 'test',
+      commands: [
+        
+      ]
+
+    }))
+
     }
 
 
