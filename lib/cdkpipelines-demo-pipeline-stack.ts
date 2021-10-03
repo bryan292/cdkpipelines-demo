@@ -45,7 +45,7 @@ export class CdkpipelinesDemoPipelineStack extends Stack {
 
     const callMedstakDev = pipeline.addApplicationStage(dev);
     callMedstakDev.addActions(new ShellScriptAction({
-      actionName: 'Push Container to Medstak',
+      actionName: 'PushContainer to Medstak',
     commands: [
       'curl -X POST https://dashboard.medstack.co/webhooks/incoming/9R1M8LR2/NmDki2S7mFL26aW14flF'
     ]
