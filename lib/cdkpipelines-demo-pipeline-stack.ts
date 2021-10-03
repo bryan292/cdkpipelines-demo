@@ -38,15 +38,25 @@ export class CdkpipelinesDemoPipelineStack extends Stack {
       }),
     });
 
-    pipeline.addApplicationStage(new CdkpipelinesDemoStage(this,'PrePROD',{
-      env: { account: '389938679709', region: 'us-east-2' },
+    //pipeline.addApplicationStage(new CdkpipelinesDemoStage(this,'PrePROD',{
+    //  env: { account: '389938679709', region: 'us-east-2' },
 
-    }));
-    pipeline.addApplicationStage(new CDKPipelineConatinerCommit(this,'dockerHub',{
-      env: { account: '389938679709', region: 'us-east-2' },
-    }));
+    //}));
 
-    }
+    const dev = new CDKPipelineConatinerCommit(this,'dockerHub',{
+      env: { account: '389938679709', region: 'us-east-2' },
+    });
+
+    const callMedstakDev = pipeline.addApplicationStage(dev);
+
+    callMedstakDev.addActions(new ShellScriptAction({
+      actionName: 'PushContainertoMedstak',
+      additionalArtifacts: [],
+    commands: [
+      'curl -X POST https://dashboard.medstack.co/webhooks/incoming/9R1M8LR2/NmDki2S7mFL26aW14flF'
+    ]
+    }));
 
 
   }
+}
