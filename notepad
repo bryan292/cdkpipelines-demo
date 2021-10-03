@@ -4,35 +4,27 @@ vim ~/.aws/credentials
 export AWS_PROFILE=cdk
 
 npx cdk bootstrap \
-  --profile crcloud \
+  --profile cdk \
   --cloudformation-execution-policies arn:aws:iam::aws:policy/AdministratorAccess \
-  aws://crcloud/us-east-2
+  aws://389938679709/us-east-2
+
+
+npm run build
+npx cdk synth
+npx cdk deploy 
+
+cdk github repo token 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
 
 
   vim ~/.aws/config
 
 
-
-npx cdk deploy \
-CdkpipelinesDemoPipelineStack
-cdk
-
-
-bryan key AKIAVVSRIB6O6O46U5UN
-secret 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
-
-
-aws configure set aws_access_key_id AKIAVVSRIB6O6O46U5UN; \
-aws configure set aws_secret_access_key 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; \
+aws configure set aws_access_key_id AKIAVVSRIB6ORBAKNRO7; \
+aws configure set aws_secret_access_key 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; \
 aws configure set default.region us-east-2;
+
+
 
 aws configure -- to edit configuration values
 
 --------------
-cdk user
-key AKIAVVSRIB6O2XVUXH7N
-secret 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
-
-aws configure set aws_access_key_id AKIAVVSRIB6O2XVUXH7N; \
-aws configure set aws_secret_access_key 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; \
-aws configure set default.region us-east-2;
