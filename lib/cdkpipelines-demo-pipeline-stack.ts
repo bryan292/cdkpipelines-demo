@@ -42,9 +42,11 @@ export class CdkpipelinesDemoPipelineStack extends Stack {
       env: { account: '389938679709', region: 'us-east-2' },
 
     }));
-    pipeline.addApplicationStage(new CDKPipelineConatinerCommit(this,'dockerHub',{
+    const devStage = new CDKPipelineConatinerCommit(this,'dockerHub',{
       env: { account: '389938679709', region: 'us-east-2' },
-    }));
+    });
+
+    const callMedstakDev = pipeline.addApplicationStage(devStage);
 
     }
 
